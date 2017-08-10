@@ -7,35 +7,43 @@ using Microsoft.AspNetCore.Mvc;
 namespace ApplicationInsightsDemo.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class CarsController : Controller
     {
-        // GET api/values
+        private AppDbContext _db;
+
+        public CarsController(AppDbContext db)
+        {
+            _db = db;  
+        }
+
+        // GET api/cars
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IList<Car> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _db.Cars.ToList();
         }
 
-        // GET api/values/5
+        // GET api/cars/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<Car> Get(int id)
         {
-            return "value";
+            var car = await _db.Cars.FindAsync(id);
+            return car;
         }
 
-        // POST api/values
+        // POST api/cars
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/values/5
+        // PUT api/cars/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/cars/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
